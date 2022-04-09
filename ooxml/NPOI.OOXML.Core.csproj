@@ -9,8 +9,14 @@
     <AssemblyOriginatorKeyFile>npoi.snk</AssemblyOriginatorKeyFile>
 
 	  <PackageId>Xenoage.Experimental.NPOI.OOXML.Core.WithoutSystemDrawing</PackageId>
-	  <PackageVersion>0.0.1</PackageVersion>
-	  <RepositoryUrl>https://github.com/tonyqus/npoi</RepositoryUrl>
+	  <PackageVersion>0.0.2</PackageVersion>
+	  <RepositoryUrl>https://github.com/Xenoage/npoi</RepositoryUrl>
+	  <PackageTags>NPOI</PackageTags>
+	  <Description>
+		  This experimental update of the NPOI library removes all System.Drawing (GDI+) dependencies and replaces them by
+		  SixLabors.ImageSharp dependencies. It was started because System.Drawing is deprecated starting from .NET 6 on
+		  non-Windows platforms.
+	  </Description>
 	  
   </PropertyGroup>
 
