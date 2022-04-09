@@ -20,9 +20,9 @@ namespace NPOI.HSSF.UserModel
     using System;
     using NPOI.HSSF.Util;
     using NPOI.Util;
-
-    using System.Drawing;
     using NPOI.SS.UserModel;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -64,9 +64,9 @@ namespace NPOI.HSSF.UserModel
         private HSSFWorkbook workbook;
         private float verticalPointsPerPixel = 1.0f;
         private float verticalPixelsPerPoint;
-        private Color foreground;
-        private Color background = Color.White;
-        private Font font;
+        private Rgb24 foreground;
+        private Rgb24 background = new Rgb24(255, 255, 255);
+        private IDisposable font; // TODO-SixLabors.Fonts: Font
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
 
         /**
@@ -83,7 +83,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font("Arial", 10);
+            // this.font = new Font("Arial", 10); // TODO-SixLabors.Fonts
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -97,13 +97,13 @@ namespace NPOI.HSSF.UserModel
          * @param verticalPointsPerPixel    The font multiplier.  (See class description for information on how this works.).
          * @param font                  The font to use.
          */
-        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, Font font, float verticalPointsPerPixel)
+        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, /* Font */ object font, float verticalPointsPerPixel)
         {
             this.escherGroup = escherGroup;
             this.workbook = workbook;
             this.foreground = foreground;
             //        this.background = background;
-            this.font = font;
+            // this.font = font;  // TODO-SixLabors.Fonts
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
         }
@@ -285,7 +285,7 @@ namespace NPOI.HSSF.UserModel
         {
             if (string.IsNullOrEmpty(str))
                 return;
-
+            /* TODO-SixLabors.Fonts
             using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))
             {
                 FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
@@ -300,8 +300,10 @@ namespace NPOI.HSSF.UserModel
                 s.ApplyFont(hssfFont);
                 textbox.String = (s);
             }
+            */
         }
 
+        /* TODO-SixLabors.Fonts
         private HSSFFont MatchFont(Font font)
         {
             HSSFColor hssfColor = workbook.GetCustomPalette()
@@ -334,6 +336,7 @@ namespace NPOI.HSSF.UserModel
 
             return hssfFont;
         }
+        */
 
 
         //public void DrawString(AttributedCharIEnumerator iterator,
@@ -455,7 +458,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public Font Font
+        public IDisposable Font /* TODO-SixLabors.Fonts: Font */
         {
             get
             {
@@ -484,7 +487,7 @@ namespace NPOI.HSSF.UserModel
             foreground = color;
         }
 
-        public void SetFont(Font f)
+        public void SetFont(IDisposable f) /* TODO-SixLabors.Fonts: Font */
         {
             font = f;
         }

@@ -19,8 +19,9 @@ namespace TestCases.XSSF.UserModel
     using System;
     using NUnit.Framework;
     using System.Collections.Generic;
-    using System.Drawing;
     using NPOI.XSSF.UserModel;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.PixelFormats;
 
     [TestFixture]
     public class TestXSSFTextRun
@@ -48,9 +49,9 @@ namespace TestCases.XSSF.UserModel
                 //Assert.IsNotNull(run.XmlObject);
                 Assert.IsNotNull(run.GetRPr());
 
-                Assert.AreEqual(Color.FromArgb(0, 0, 0), run.FontColor);
+                Assert.AreEqual(Color.FromRgb(0, 0, 0), run.FontColor);
 
-                Color color = Color.FromArgb(0, 255, 255);
+                var color = new Rgb24(0, 255, 255);
                 run.FontColor = (/*setter*/color);
                 Assert.AreEqual(color, run.FontColor);
 

@@ -20,7 +20,6 @@ namespace NPOI.SS.Util
     using System;
 
     using NPOI.SS.UserModel;
-    using System.Drawing;
     using System.Collections.Generic;
 
     /**
@@ -274,6 +273,7 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if cell is empty
          */
+        /* TODO-SixLabors.Fonts:
         public static double GetCellWidth(ICell cell, int defaultCharWidth, DataFormatter formatter, bool useMergedCells)
         {
             ISheet sheet = cell.Sheet;
@@ -361,6 +361,8 @@ namespace NPOI.SS.Util
             return width;
         }
 
+
+        /* TODO-SixLabors.Fonts:
         private static double GetCellWidth(int defaultCharWidth, int colspan,
             ICellStyle style, double width, string str, Graphics g, Font windowsFont, ICell cell)
         {
@@ -386,6 +388,7 @@ namespace NPOI.SS.Util
             width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) + cell.CellStyle.Indention);
             return width;
         }
+        */
         // /**
         // * Drawing context to measure text
         // */
@@ -399,10 +402,13 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if all cells are empty
          */
+        /* TODO-SixLabors.Fonts:
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
         {
             return GetColumnWidth(sheet, column, useMergedCells, sheet.FirstRowNum, sheet.LastRowNum);
         }
+        */
+
         /**
          * Compute width of a column based on a subset of the rows and return the result
          *
@@ -414,6 +420,7 @@ namespace NPOI.SS.Util
          * @param maxRows   limit the scope to maxRows rows to speed up the function, or leave 0 (optional)
          * @return  the width in pixels or -1 if cell is empty
          */
+        /* TODO-SixLabors.Fonts:
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows=0)
         {
             DataFormatter formatter = new DataFormatter();
@@ -433,7 +440,7 @@ namespace NPOI.SS.Util
                 }
             }
             return width;
-        }
+        } */
 
         /**
          * Get default character width
@@ -441,6 +448,7 @@ namespace NPOI.SS.Util
          * @param wb the workbook to get the default character width from
          * @return default character width
          */
+        /* TODO-SixLabors.Fonts:
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
@@ -461,6 +469,7 @@ namespace NPOI.SS.Util
             }
             return defaultCharWidth;
         }
+        */
 
         /**
          * Compute width of a single cell in a row
@@ -473,6 +482,7 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if cell is empty
          */
+        /* TODO-SixLabors.Fonts:
         private static double GetColumnWidthForRow(
                 IRow row, int column, int defaultCharWidth, DataFormatter formatter, bool useMergedCells)
         {
@@ -490,6 +500,7 @@ namespace NPOI.SS.Util
 
             return GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
         }
+        */
 
         /**
          * Check if the Fonts are installed correctly so that Java can compute the size of
@@ -533,6 +544,7 @@ namespace NPOI.SS.Util
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
+        /* TODO-SixLabors.Fonts:
         internal static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
@@ -549,6 +561,8 @@ namespace NPOI.SS.Util
             Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
             return font;
         }
+        */
+
         /// <summary>
         /// Check if the cell is in the specified cell range
         /// </summary>

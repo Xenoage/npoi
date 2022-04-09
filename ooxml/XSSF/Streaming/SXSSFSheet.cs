@@ -573,7 +573,7 @@ namespace NPOI.XSSF.Streaming
             }
 
             // get the best-fit width of rows currently in the random access window
-            int activeWidth = (int)(256 * SheetUtil.GetColumnWidth(this, column, useMergedCells));
+            int activeWidth = -1; // TODO-SixLabors.Fonts: (int)(256 * SheetUtil.GetColumnWidth(this, column, useMergedCells));
 
             // the best-fit width for both flushed rows and random access window rows
             // flushedWidth or activeWidth may be negative if column contains only blank cells

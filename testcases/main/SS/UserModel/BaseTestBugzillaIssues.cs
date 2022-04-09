@@ -25,7 +25,6 @@ namespace TestCases.SS.UserModel
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.IO;
     using System.Text;
 
@@ -347,6 +346,8 @@ namespace TestCases.SS.UserModel
             fmla.Append(")");
             return fmla.ToString();
         }
+
+        /* TODO - SixLabors.Fonts:
         [Test]
         public void Bug50681_TestAutoSize()
         {
@@ -447,6 +448,7 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
+        */
 
         /**
          * Test if a > b. Fails if false.
@@ -460,7 +462,7 @@ namespace TestCases.SS.UserModel
             }
         }
 
-
+        /* TODO - SixLabors.Fonts:
         private double ComputeCellWidthManually(ICell cell0, IFont font)
         {
             double width;
@@ -505,6 +507,7 @@ namespace TestCases.SS.UserModel
             }
             return width;
         }
+        */
 
         //private static void copyAttributes(Font font, AttributedString str, int startIdx, int endIdx)
         //{

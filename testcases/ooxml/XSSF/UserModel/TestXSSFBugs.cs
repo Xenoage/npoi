@@ -36,6 +36,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.XSSF.UserModel.Extensions;
     using NUnit.Framework;
     using NUnit.Framework.Constraints;
+    using SixLabors.ImageSharp;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -3267,7 +3268,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
-            XSSFColor color = new XSSFColor(System.Drawing.Color.Red);
+            XSSFColor color = new XSSFColor(Color.Red);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
@@ -3285,7 +3286,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
-            XSSFColor ncolor = new XSSFColor(System.Drawing.Color.Red);
+            XSSFColor ncolor = new XSSFColor(Color.Red);
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
             Assert.IsNotNull(nactual);
