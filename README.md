@@ -5,3 +5,7 @@ This experimental update of the [NPOI](https://github.com/nissl-lab/npoi) librar
 For measuring text, also `System.Drawing` was used. This is not supported by `SixLabors.ImageSharp` and all those method bodies were commented out. Thus, calling methods like `ISheet.AutoSizeColumn` have no effect. These features could be added by using libraries like `SixLabors.Fonts`.
 
 See the [NPOI](https://github.com/nissl-lab/npoi) project for further information.
+
+### NuGet package
+
+We have created an experimental [NuGet package](https://www.nuget.org/packages/Xenoage.Experimental.NPOI.OOXML.Core.WithoutSystemDrawing).
