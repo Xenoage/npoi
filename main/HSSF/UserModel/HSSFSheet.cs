@@ -35,6 +35,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.Util;
     using NPOI.SS.UserModel.Helpers;
     using NPOI.HSSF.UserModel.helpers;
+    using SixLabors.Fonts;
 
 
 
@@ -2310,7 +2311,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
-            double width = -1; // TODO-SixLabors.Fonts: SheetUtil.GetColumnWidth(this, column, useMergedCells);
+            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
             if (width != -1)
             {
                 width *= 256;
@@ -2375,12 +2376,11 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        /* TODO-SixLabors.Fonts:
-        public System.Drawing.Font HSSFFont2Font(HSSFFont font1)
+        public Font HSSFFont2Font(HSSFFont font1)
         {
-            return new System.Drawing.Font(font1.FontName, (float)font1.FontHeightInPoints);
+            // TODO-Fonts: Fallback for missing font
+            return new Font(SystemFonts.Get(font1.FontName), (float)font1.FontHeightInPoints);
         }
-        */
 
         /// <summary>
         /// Returns cell comment for the specified row and column

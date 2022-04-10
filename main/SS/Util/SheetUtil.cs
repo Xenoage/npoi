@@ -21,6 +21,7 @@ namespace NPOI.SS.Util
 
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
+    using SixLabors.Fonts;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -273,7 +274,6 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if cell is empty
          */
-        /* TODO-SixLabors.Fonts:
         public static double GetCellWidth(ICell cell, int defaultCharWidth, DataFormatter formatter, bool useMergedCells)
         {
             ISheet sheet = cell.Sheet;
@@ -307,8 +307,6 @@ namespace NPOI.SS.Util
             IFont font = wb.GetFontAt(style.FontIndex);
 
             double width = -1;
-            using (Bitmap bmp = new Bitmap(1,1))
-            using (Graphics g = Graphics.FromImage(bmp))
             {
                 if (cellType == CellType.String)
                 {
@@ -326,7 +324,7 @@ namespace NPOI.SS.Util
                             // TODO: support rich text fragments
                         }
 
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
                     }
                 }
                 else
@@ -354,24 +352,22 @@ namespace NPOI.SS.Util
                         //str = new AttributedString(txt);
                         //copyAttributes(font, str, 0, txt.length());
                         windowsFont = IFont2Font(font);
-                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, g, windowsFont, cell);
+                        width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
                     }
                 }
             }
             return width;
         }
 
-
-        /* TODO-SixLabors.Fonts:
         private static double GetCellWidth(int defaultCharWidth, int colspan,
-            ICellStyle style, double width, string str, Graphics g, Font windowsFont, ICell cell)
+            ICellStyle style, double width, string str, Font windowsFont, ICell cell)
         {
             //Rectangle bounds;
             double actualWidth;
+            FontRectangle sf = TextMeasurer.Measure(str, new TextOptions(windowsFont));
             if (style.Rotation != 0)
             {
                 double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                SizeF sf = g.MeasureString(str, windowsFont);
                 double x1 = Math.Abs(sf.Height * Math.Sin(angle));
                 double x2 = Math.Abs(sf.Width * Math.Cos(angle));
                 actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
@@ -380,7 +376,7 @@ namespace NPOI.SS.Util
             else
             {
                 //bounds = layout.getBounds();
-                actualWidth = Math.Round(g.MeasureString(str, windowsFont, int.MaxValue, StringFormat.GenericTypographic).Width, 0, MidpointRounding.ToEven);                
+                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);                
             }
             // entireWidth accounts for leading spaces which is excluded from bounds.getWidth()
             //double frameWidth = bounds.getX() + bounds.getWidth();
@@ -388,7 +384,7 @@ namespace NPOI.SS.Util
             width = Math.Max(width, (actualWidth / colspan / defaultCharWidth) + cell.CellStyle.Indention);
             return width;
         }
-        */
+
         // /**
         // * Drawing context to measure text
         // */
@@ -402,12 +398,10 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if all cells are empty
          */
-        /* TODO-SixLabors.Fonts:
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells)
         {
             return GetColumnWidth(sheet, column, useMergedCells, sheet.FirstRowNum, sheet.LastRowNum);
         }
-        */
 
         /**
          * Compute width of a column based on a subset of the rows and return the result
@@ -420,7 +414,6 @@ namespace NPOI.SS.Util
          * @param maxRows   limit the scope to maxRows rows to speed up the function, or leave 0 (optional)
          * @return  the width in pixels or -1 if cell is empty
          */
-        /* TODO-SixLabors.Fonts:
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows=0)
         {
             DataFormatter formatter = new DataFormatter();
@@ -440,7 +433,7 @@ namespace NPOI.SS.Util
                 }
             }
             return width;
-        } */
+        }
 
         /**
          * Get default character width
@@ -448,7 +441,6 @@ namespace NPOI.SS.Util
          * @param wb the workbook to get the default character width from
          * @return default character width
          */
-        /* TODO-SixLabors.Fonts:
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
@@ -457,19 +449,9 @@ namespace NPOI.SS.Util
             //copyAttributes(defaultFont, str, 0, 1);
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //int defaultCharWidth = (int)layout.getAdvance();
-            int defaultCharWidth = 0;
             Font font = IFont2Font(defaultFont);
-            using (var image = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(image))
-                {
-                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    defaultCharWidth = (int)g.MeasureString(new String(defaultChar, 1), font, int.MaxValue, StringFormat.GenericTypographic).Width;
-                }
-            }
-            return defaultCharWidth;
+            return (int)Math.Ceiling(TextMeasurer.Measure(new string(defaultChar, 1), new TextOptions(font)).Width);
         }
-        */
 
         /**
          * Compute width of a single cell in a row
@@ -482,7 +464,6 @@ namespace NPOI.SS.Util
          * @param useMergedCells    whether to use merged cells
          * @return  the width in pixels or -1 if cell is empty
          */
-        /* TODO-SixLabors.Fonts:
         private static double GetColumnWidthForRow(
                 IRow row, int column, int defaultCharWidth, DataFormatter formatter, bool useMergedCells)
         {
@@ -500,7 +481,6 @@ namespace NPOI.SS.Util
 
             return GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
         }
-        */
 
         /**
          * Check if the Fonts are installed correctly so that Java can compute the size of
@@ -536,7 +516,7 @@ namespace NPOI.SS.Util
         //    str.AddAttribute(TextAttribute.SIZE, (float)font.FontHeightInPoints);
         //    if (font.Boldweight == (short)FontBoldWeight.BOLD) str.AddAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, startIdx, endIdx);
         //    if (font.IsItalic) str.AddAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, startIdx, endIdx);
-        //    if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
+        //    TODO-Fonts: not supported: if (font.Underline == (byte)FontUnderlineType.SINGLE) str.AddAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, startIdx, endIdx);           
         //}
 
         /// <summary>
@@ -544,7 +524,6 @@ namespace NPOI.SS.Util
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        /* TODO-SixLabors.Fonts:
         internal static Font IFont2Font(IFont font1)
         {
             FontStyle style = FontStyle.Regular;
@@ -554,14 +533,28 @@ namespace NPOI.SS.Util
             }
             if (font1.IsItalic)
                 style |= FontStyle.Italic;
+
+            /* TODO-Fonts: not supported
             if (font1.Underline == FontUnderlineType.Single)
             {
                 style |= FontStyle.Underline;
             }
-            Font font = new Font(font1.FontName, (float)font1.FontHeightInPoints, style, GraphicsUnit.Point);
+            */
+
+            // Try to find font in system fonts. If we can not find out,
+            // use "Arial". TODO-Fonts: More fallbacks.
+            SixLabors.Fonts.FontFamily fontFamily;
+            if (false == SystemFonts.TryGet(font1.FontName, out fontFamily))
+            {
+                if (false == SystemFonts.TryGet("Arial", out fontFamily))
+                {
+                    throw new Exception($"Could not find font \"{font1.FontName}\" and also not fallback font \"Arial\"");
+                }
+            }
+
+            Font font = new Font(fontFamily, (float)font1.FontHeightInPoints, style);
             return font;
         }
-        */
 
         /// <summary>
         /// Check if the cell is in the specified cell range

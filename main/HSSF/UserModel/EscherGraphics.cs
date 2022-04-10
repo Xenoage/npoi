@@ -23,6 +23,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.Fonts;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -66,7 +67,7 @@ namespace NPOI.HSSF.UserModel
         private float verticalPixelsPerPoint;
         private Rgb24 foreground;
         private Rgb24 background = new Rgb24(255, 255, 255);
-        private IDisposable font; // TODO-SixLabors.Fonts: Font
+        private Font font;
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
 
         /**
@@ -83,7 +84,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            // this.font = new Font("Arial", 10); // TODO-SixLabors.Fonts
+            this.font = new Font(SystemFonts.Get("Arial"), 10);
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -97,13 +98,13 @@ namespace NPOI.HSSF.UserModel
          * @param verticalPointsPerPixel    The font multiplier.  (See class description for information on how this works.).
          * @param font                  The font to use.
          */
-        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, /* Font */ object font, float verticalPointsPerPixel)
+        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, Font font, float verticalPointsPerPixel)
         {
             this.escherGroup = escherGroup;
             this.workbook = workbook;
             this.foreground = foreground;
             //        this.background = background;
-            // this.font = font;  // TODO-SixLabors.Fonts
+            this.font = font;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
         }
@@ -122,20 +123,7 @@ namespace NPOI.HSSF.UserModel
 
         public void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (null != font)
-                {
-                    font.Dispose();
-                    font = null;
-                }
-            }
         }
 
         public void ClearRect(int x, int y, int width, int height)
@@ -285,11 +273,11 @@ namespace NPOI.HSSF.UserModel
         {
             if (string.IsNullOrEmpty(str))
                 return;
-            /* TODO-SixLabors.Fonts
-            using (Font excelFont = new Font(font.Name.Equals("SansSerif") ? "Arial" : font.Name, (int)(font.Size / verticalPixelsPerPoint), font.Style))
+            // TODO-Fonts: Fallback for missing font
+            Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
+                (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
             {
-                FontDetails d = StaticFontMetrics.GetFontDetails(excelFont);
-                int width = (int)((d.GetStringWidth(str) * 8) + 12);
+                int width = (int)((TextMeasurer.Measure(str, new TextOptions(excelFont)).Width * 8) + 12);
                 int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
                 y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
                 HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
@@ -300,18 +288,16 @@ namespace NPOI.HSSF.UserModel
                 s.ApplyFont(hssfFont);
                 textbox.String = (s);
             }
-            */
         }
 
-        /* TODO-SixLabors.Fonts
         private HSSFFont MatchFont(Font font)
         {
             HSSFColor hssfColor = workbook.GetCustomPalette()
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             if (hssfColor == null)
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            bool bold = font.Bold;
-            bool italic = font.Italic;
+            bool bold = font.IsBold;
+            bool italic = font.IsItalic;
             HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
                         hssfColor.Indexed,
                         (short)(font.Size * 20),
@@ -336,7 +322,6 @@ namespace NPOI.HSSF.UserModel
 
             return hssfFont;
         }
-        */
 
 
         //public void DrawString(AttributedCharIEnumerator iterator,
@@ -458,7 +443,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public IDisposable Font /* TODO-SixLabors.Fonts: Font */
+        public Font Font
         {
             get
             {
@@ -487,7 +472,7 @@ namespace NPOI.HSSF.UserModel
             foreground = color;
         }
 
-        public void SetFont(IDisposable f) /* TODO-SixLabors.Fonts: Font */
+        public void SetFont(Font f)
         {
             font = f;
         }

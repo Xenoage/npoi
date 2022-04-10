@@ -92,7 +92,7 @@ namespace NPOI.XSSF.Streaming
         public AutoSizeColumnTracker(ISheet sheet)
         {
             // If sheet needs to be saved, use a java.lang.ref.WeakReference to avoid garbage collector gridlock.
-            defaultCharWidth = -1; // TODO-SixLabors.Fonts: SheetUtil.GetDefaultCharWidth(sheet.Workbook);
+            defaultCharWidth = SheetUtil.GetDefaultCharWidth(sheet.Workbook);
         }
 
         /**
@@ -390,11 +390,9 @@ namespace NPOI.XSSF.Streaming
          */
         private void UpdateColumnWidth(ICell cell, ColumnWidthPair pair)
         {
-            /*  TODO-SixLabors.Fonts:
             double unmergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, false);
             double mergedWidth = SheetUtil.GetCellWidth(cell, defaultCharWidth, dataFormatter, true);
             pair.SetMaxColumnWidths(unmergedWidth, mergedWidth);
-            */
         }
     }
 

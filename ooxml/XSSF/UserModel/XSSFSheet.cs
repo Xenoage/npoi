@@ -493,7 +493,7 @@ namespace NPOI.XSSF.UserModel
          */
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
-            double width = -1; // TODO-SixLabors.Fonts: SheetUtil.GetColumnWidth(this, column, useMergedCells);
+            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
 
             if (width != -1)
             {

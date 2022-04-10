@@ -61,7 +61,7 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        /* TODO-SixLabors.Fonts
+        /* TODO-Fonts:
         [Test]
         public void TestGetFont()
         {
@@ -87,7 +87,7 @@ namespace TestCases.HSSF.UserModel
         //    //Assert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
         //}
 
-        /* TODO-SixLabors.Fonts
+        /* TODO-Fonts:
         [Test]
         public void TestSetFont()
         {
